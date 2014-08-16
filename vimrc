@@ -1,68 +1,55 @@
-""
-"" Janus setup
-""
+set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
 
-" Define paths
-let g:janus_path = escape(fnamemodify(resolve(expand("<sfile>:p")), ":h"), ' ')
-let g:janus_vim_path = escape(fnamemodify(resolve(expand("<sfile>:p" . "vim")), ":h"), ' ')
-let g:janus_custom_path = expand("~/.janus")
+call vundle#begin()
 
-" Source janus's core
-exe 'source ' . g:janus_vim_path . '/core/before/plugin/janus.vim'
+Plugin 'gmarik/Vundle.vim'
+Plugin 'scroolose/nerdcommenter'
+Plugin 'scroolose/nerdtree'
+Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'kien/ctrlp.vim'
+Plugin 'sjl/badwolf'
+Plugin 'flazz/vim-colorschemes'
 
-" You should note that groups will be processed by Pathogen in reverse
-" order they were added.
-call janus#add_group("tools")
-call janus#add_group("langs")
-call janus#add_group("colors")
+call vundle#end()
 
-""
-"" Customisations
-""
+let mapleader=','
 
-if filereadable(expand("~/.vimrc.before"))
-  source ~/.vimrc.before
+filetype indent on
+
+colorscheme jellybeans
+
+syntax on
+
+set number
+set tabstop=4
+set softtabstop=4
+set expandtab
+set cursorline
+
+" Key bindings
+map <leader>m :NERDTreeTabsToggle<cr>
+
+nmap <silent> <leader>ev :e $MYVIMRC<cr>
+nmap <silent> <leader>sv :so $MYVIMRC<cr>
+
+map <leader>t :tabNext<cr>
+map <leader>r :tabprevious<cr>
+map <leader>j :tabnew<cr>
+
+
+" allows cursor change in tmux mode
+if exists('$TMUX')
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
-
-" Disable plugins prior to loading pathogen
-exe 'source ' . g:janus_vim_path . '/core/plugins.vim'
-
-""
-"" Pathogen setup
-""
-
-" Load all groups, custom dir, and janus core
-call janus#load_pathogen()
-
-" .vimrc.after is loaded after the plugins have loaded
-if has("gui_running")
-  set guioptions=egmrt
-endif
-
-set t_Co=256
-colors wombat256
-colorscheme wombat256
-
-let mapleader=","
-let g:mapleader=","
-
-" Remap dem keys
-
-noremap <C-J> <C-W>j<CR>
-noremap <C-K> <C-W>k<CR>
-noremap <C-H> <C-W>h<CR>
-noremap <C-L> <C-W>l<CR>
-
-map <Leader>r :call Replace()<CR>
-map <Leader>k :tabn<CR>
-map <Leader>j :tabp<CR>
-map <Leader>l :tabnew<CR>
-nmap <silent> <leader>mc :e $MYVIMRC<CR>
-nmap <silent> <leader>sv :so $MYVIMRC<CR>
-
-set wmw=0
-set wmh=0
-
-
-
+set backup
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set backupskip=/tmp/*,/private/tmp/*
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set writebackup
